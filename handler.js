@@ -25,7 +25,7 @@ exports.main = async function(event, context) {
 
 		const emailMessage = `
 			The average calculation is complete.
-			The first four files contain ${numberOfRows} rows and their average is ${average}.
+			The first ${fileKeys.length} files contain ${numberOfRows} rows and their average is ${average}.
 			The last file contains ${numberOfRowsForLastElemnet} rows.
 		`
 		await sendEmail(emailMessage, 'Important Message');
