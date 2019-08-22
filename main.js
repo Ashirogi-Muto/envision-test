@@ -1,25 +1,26 @@
-const csv = require('fast-csv');
-const AWS = require('aws-sdk');
-const S3 = new AWS.S3();
-const SES = new AWS.SES();
+const csv = require('fast-csv')
+const AWS = require('aws-sdk')
+const S3 = new AWS.S3()
+const SES = new AWS.SES()
 
 const util = require('util')
-const promisify = util.promisify;
+const promisify = util.promisify
 
-const INPUT_BUCKET_NAME = 'envi-input-data';
+const INPUT_BUCKET_NAME = 'envi-input-data'
 const inputBucketparams = {
 	Bucket: INPUT_BUCKET_NAME
-};
-const TO_EMAIL_ADDRESS = 'kshitijpandey32@gmail.com';
-const SOURCE_EMAIL_ADDRESS = 'mutoashirogi0@gmail.com';
+}
+const TO_EMAIL_ADDRESS = 'kshitijpandey32@gmail.com'
+const SOURCE_EMAIL_ADDRESS = 'mutoashirogi0@gmail.com'
 
 const ListObjectPromise = promisify(S3.listObjects).bind(S3)
 const SendEmailPromise = promisify(SES.sendEmail).bind(SES)
-export const fetchData = () => {
+
+module.exports.fetchData = () => {
 	return new Promise((resolve, reject) => {
 		ListObjectPromise(inputBucketparams)
 			.then(async(data) => {
-				const { Contents } = data;
+				const { Contents } = data
 				resolve(Contents)
 			})
 			.catch(error => {
@@ -31,13 +32,13 @@ export const fetchData = () => {
 
 
 
-export const calculateRows = (keys) => {
+module.exports.calculateRows = (keys) => {
 	const promiseArrays = createS3ReadPromise(keys, inputBucketparams)
 	return new Promise((resolve, reject) => {
 		Promise.all(promiseArrays)
 		.then(rowData => {
-			let numberOfRows = 0;
-			rowData.map(value => numberOfRows = numberOfRows + value);
+			let numberOfRows = 0
+			rowData.map(value => numberOfRows = numberOfRows + value)
 			resolve(numberOfRows);
 		})
 		.catch(error => {
@@ -46,12 +47,12 @@ export const calculateRows = (keys) => {
 	})
 }
 
-export const calculateAverage = (allRows, numberOfFiles) => {
-	const average = allRows / numberOfFiles;
+module.exports.calculateAverage = (allRows, numberOfFiles) => {
+	const average = allRows / numberOfFiles
 	return average
 }
 
-export const sendEmail = (message, subject) => {
+module.exports.sendEmail = (message, subject) => {
 	const emailParams = {
 		Destination: {
 			ToAddresses: [
@@ -80,7 +81,7 @@ export const sendEmail = (message, subject) => {
 	return new Promise((resolve, reject) => {
 		SendEmailPromise(emailParams)
 			.then(data => {
-				const { MessageId } = data;
+				const { MessageId } = data
 				resolve(MessageId)
 			})
 			.catch(error => {

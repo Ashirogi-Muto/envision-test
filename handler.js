@@ -7,8 +7,7 @@ const createResponse = (statusCode, message) => {
 	};
 };
 const { fetchData, calculateRows, calculateAverage, sendEmail } = require('./main')
-
-export const main = async (event, context) => {
+exports.main = async function(event, context) {
 	try {
 		await sendEmail('Starting the average calculation Lambda', 'Important Message')
 		const fetchedCSV = await fetchData();
@@ -40,4 +39,6 @@ export const main = async (event, context) => {
 			message: `Error ${error}`
 		});
 	}
-};
+}
+// export const main = async (event, context) => {
+// };
