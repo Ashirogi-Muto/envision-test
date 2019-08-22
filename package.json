@@ -1,0 +1,29 @@
+{
+ "name": "envision-lambda",
+ "version": "1.0.0",
+ "description": "",
+ "main": "handler.js",
+ "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1"
+ },
+ "keywords": [
+  "aws",
+  "serverless"
+ ],
+ "author": "Kshitij Pandey",
+ "license": "MIT",
+ "devDependencies": {
+  "@babel/core": "^7.2.2",
+  "@babel/preset-env": "^7.3.1",
+  "babel-loader": "^8.0.5",
+  "babel-plugin-source-map-support": "^2.0.1",
+  "serverless-webpack": "^5.2.0",
+  "webpack": "^4.29.3",
+  "webpack-node-externals": "^1.7.2"
+ },
+ "dependencies": {
+  "aws-sdk": "^2.514.0",
+  "fast-csv": "^3.4.0",
+  "source-map-support": "^0.5.10"
+ }
+}
