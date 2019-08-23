@@ -11,21 +11,21 @@ exports.main = async function(event, context) {
 	try {
 		await sendEmail('Starting the average calculation Lambda', 'Important Message')
 		const fetchedCSV = await fetchData();
-		let fileKeys = fetchedCSV.map(file => {
-			const { Key } = file;
+		let timestampSortedData = fetchedCSV.sort((first, second) => (first.LastModified > second.LastModified) ? 1 : -1).map(item => {
+			const { Key } = item;
 			return Key
 		})
-		const lastElement = fileKeys[fileKeys.length - 1];
-		fileKeys.length -= 1;
+		const lastElement = timestampSortedData[timestampSortedData.length - 1];
+		timestampSortedData.length -= 1;
 
-		const numberOfRows = await calculateRows(fileKeys);
+		const numberOfRows = await calculateRows(timestampSortedData);
 		const numberOfRowsForLastElemnet = await calculateRows(lastElement);
 
-		const average = await calculateAverage(numberOfRows, fileKeys.length);
+		const average = await calculateAverage(numberOfRows, timestampSortedData.length);
 
 		const emailMessage = `
 			The average calculation is complete.
-			The first ${fileKeys.length} files contain ${numberOfRows} rows and their average is ${average}.
+			The first ${timestampSortedData.length} files contain ${numberOfRows} rows and their average is ${average}.
 			The last file contains ${numberOfRowsForLastElemnet} rows.
 		`
 		await sendEmail(emailMessage, 'Important Message');
