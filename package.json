@@ -23,7 +23,7 @@
  },
  "dependencies": {
   "aws-sdk": "^2.514.0",
-  "fast-csv": "^3.4.0",
+  "fast-csv": "^4.3.6",
   "source-map-support": "^0.5.10"
  }
 }
